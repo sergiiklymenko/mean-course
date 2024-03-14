@@ -25,7 +25,7 @@ router.put("/:id", (req, res, next) => {
     content: req.body.content,
   });
   console.log(post);
-  Post.updateOne({ _id: req.params.id }, { $set: { post } }).then((result) => {
+  Post.updateOne({ _id: req.params.id }, post).then((result) => {
     console.log(result);
     res.status(200).json({ message: "Update Successful" });
   });
