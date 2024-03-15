@@ -37,13 +37,22 @@ export class PostCreateComponent implements OnInit {
         this.postId = paramMap.get('postId');
         this.isLoading = true;
         this.postsService.getPost(this.postId).subscribe((postData) => {
+          console.log(postData);
           this.isLoading = false;
           this.post = {
             id: postData._id,
             title: postData.title,
             content: postData.content,
+            imagePath: postData.imagePath,
           };
+          this.form?.setValue({
+            title: this.post.title,
+            content: this.post.content,
+            image: this.post.imagePath,
+          });
         });
+
+        console.log(this.form);
       } else {
         this.mode = 'create';
         this.postId = null;
@@ -52,6 +61,7 @@ export class PostCreateComponent implements OnInit {
   }
 
   onSavePost() {
+    console.log(this.form);
     if (this.form.invalid) {
       return;
     }
@@ -66,14 +76,12 @@ export class PostCreateComponent implements OnInit {
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
-        this.form.value.content
+        this.form.value.content,
+        this.form.value.imagePath
       );
-      this.form?.setValue({
-        title: this.post.title,
-        content: this.post.content,
-      });
     }
     this.form.reset();
+    this.isLoading = false;
   }
 
   onImagePicked(event: Event) {
