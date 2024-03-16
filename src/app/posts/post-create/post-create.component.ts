@@ -22,7 +22,7 @@ export class PostCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      title: new FormControl(null, {
+      title: new FormControl('333', {
         validators: [Validators.required, Validators.minLength(3)],
       }),
       content: new FormControl(null, { validators: [Validators.required] }),
@@ -33,6 +33,7 @@ export class PostCreateComponent implements OnInit {
     });
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postId')) {
+        console.log('edit mode');
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
         this.isLoading = true;
@@ -45,11 +46,13 @@ export class PostCreateComponent implements OnInit {
             content: postData.content,
             imagePath: postData.imagePath,
           };
+          console.log(this.post);
           this.form?.setValue({
             title: this.post.title,
             content: this.post.content,
             image: this.post.imagePath,
           });
+          console.log(this.form);
         });
 
         console.log(this.form);
@@ -73,11 +76,13 @@ export class PostCreateComponent implements OnInit {
         this.form.value.image
       );
     } else {
+      console.log(this.form);
+      console.log('Edit');
       this.postsService.updatePost(
         this.postId,
         this.form.value.title,
         this.form.value.content,
-        this.form.value.imagePath
+        this.form.value.image
       );
     }
     this.form.reset();
